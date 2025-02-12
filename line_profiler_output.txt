@@ -1,7 +1,7 @@
 Timer unit: 1e-09 s
 
-Total time: 0.0469058 s
-File: /home/joshua/WORK/test_genesis/cimpc/utils/models.py
+Total time: 0.0674773 s
+File: /home/douyuanke/cimpc1/ftddp/utils/models.py
 Function: collision_test at line 120
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
@@ -9,40 +9,40 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
    120                                               @profile
    121                                               def collision_test(self,data,tau,v):
    122                                                   
-   123       370     126653.0    342.3      0.3          for i, contact_id in enumerate(self.contact_ids):
-   124       296     299033.0   1010.2      0.6              oMf = data.pinocchio.oMf[contact_id]
-   125       296     134297.0    453.7      0.3              pos = oMf.translation
-   126       296     171139.0    578.2      0.4              rot = oMf.rotation
-   127       296     469461.0   1586.0      1.0              self.contact_objects[i].setTransform(coal.Transform3s(rot, pos))
+   123       370     170567.0    461.0      0.3          for i, contact_id in enumerate(self.contact_ids):
+   124       296     422385.0   1427.0      0.6              oMf = data.pinocchio.oMf[contact_id]
+   125       296     178428.0    602.8      0.3              pos = oMf.translation
+   126       296     207978.0    702.6      0.3              rot = oMf.rotation
+   127       296     720951.0   2435.6      1.1              self.contact_objects[i].setTransform(coal.Transform3s(rot, pos))
    128                                                       
-   129       296    3775077.0  12753.6      8.0              set_lf_cost(self.costs, self.state, self.actuation, contact_id ,pos[2])
+   129       296    4673482.0  15788.8      6.9              set_lf_cost(self.costs, self.state, self.actuation, contact_id ,pos[2])
    130                                                       
-   131        74       9327.0    126.0      0.0          collision_ids = []
-   132        74       8454.0    114.2      0.0          normal_trans = []
-   133        74       7620.0    103.0      0.0          height = []
-   134       370      93431.0    252.5      0.2          for i in range(len(self.contact_objects)):
-   135       296     213838.0    722.4      0.5              result = coal.CollisionResult() # 必须清空...
-   136       296     203802.0    688.5      0.4              req = coal.CollisionRequest()   
-   137       296     266407.0    900.0      0.6              if coal.collide(self.contact_objects[i], ground_obj, req, result):
+   131        74      15598.0    210.8      0.0          collision_ids = []
+   132        74      11929.0    161.2      0.0          normal_trans = []
+   133        74      14022.0    189.5      0.0          height = []
+   134       370     147624.0    399.0      0.2          for i in range(len(self.contact_objects)):
+   135       296     252537.0    853.2      0.4              result = coal.CollisionResult() # 必须清空...
+   136       296     228806.0    773.0      0.3              req = coal.CollisionRequest()   
+   137       296     370719.0   1252.4      0.5              if coal.collide(self.contact_objects[i], ground_obj, req, result):
    138                                                           # contact = result.getContacts()[0]
-   139        51      36814.0    721.8      0.1                  collision_ids.append(self.contact_ids[i])
+   139        51      26970.0    528.8      0.0                  collision_ids.append(self.contact_ids[i])
    140                                                           
    141                                                           # current = np.array([0,0,1])
    142                                                           # target = -contact.normal
    143                                                           # normal_trans.append(pinocchio.Quaternion.FromTwoVectors(current,target).matrix())
    144                                                           
    145                                                           # height.append(contact.pos[2])
-   146        51      79288.0   1554.7      0.2                  height.append(data.pinocchio.oMf[self.contact_ids[i]].translation[2])
+   146        51      93579.0   1834.9      0.1                  height.append(data.pinocchio.oMf[self.contact_ids[i]].translation[2])
    147                                                           
-   148        74      68560.0    926.5      0.1          height = np.array(height)
-   149        74      31317.0    423.2      0.1          data.collision_ids = collision_ids
+   148        74      98727.0   1334.1      0.1          height = np.array(height)
+   149        74      32965.0    445.5      0.0          data.collision_ids = collision_ids
    150                                                   
-   151        74      16540.0    223.5      0.0          if collision_ids == []:
-   152        59      10371.0    175.8      0.0              data.real_collision = False
-   153        59      18561.0    314.6      0.0              return False
+   151        74      23831.0    322.0      0.0          if collision_ids == []:
+   152        59      12540.0    212.5      0.0              data.real_collision = False
+   153        59       8900.0    150.8      0.0              return False
    154                                                       
-   155        15       3975.0    265.0      0.0          col_num = len(collision_ids)
-   156        30     146098.0   4869.9      0.3          Jk = [
+   155        15       5585.0    372.3      0.0          col_num = len(collision_ids)
+   156        30     229947.0   7664.9      0.3          Jk = [
    157                                                       # normal_trans[i]@
    158                                                       pinocchio.getFrameJacobian(
    159                                                               self.state.pinocchio,
@@ -50,116 +50,116 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
    161                                                               collision_ids[i],
    162                                                               pinocchio.ReferenceFrame.LOCAL_WORLD_ALIGNED
    163                                                               # pinocchio.ReferenceFrame.LOCAL
-   164        15       4053.0    270.2      0.0              )[:3,:] for i in range(col_num)
+   164        15       4544.0    302.9      0.0              )[:3,:] for i in range(col_num)
    165                                                   ]
    166                                                   
    167                                                   # Mtest=data.pinocchio.M
    168                                                   # if np.linalg.inv(Mtest).max() > 70:
    169                                                   #     data.pinocchio.M += self.M_reg*np.eye(data.pinocchio.M.shape[0])
-   170        15      11669.0    777.9      0.0          data.M = data.pinocchio.M
+   170        15      31226.0   2081.7      0.0          data.M = data.pinocchio.M
    171                                                   # data.Minv = np.linalg.inv(data.M)
-   172        15       6821.0    454.7      0.0          data.Minv = data.pinocchio.Minv
+   172        15      14523.0    968.2      0.0          data.Minv = data.pinocchio.Minv
    173                                               
    174                                                   
-   175        15      93579.0   6238.6      0.2          ddqf = np.dot(data.Minv, ( tau - data.pinocchio.nle ))
+   175        15     124415.0   8294.3      0.2          ddqf = np.dot(data.Minv, ( tau - data.pinocchio.nle ))
    176                                                   
-   177        15     499312.0  33287.5      1.1          Aij = [[ Jk[i]@data.Minv@Jk[j].T for j in range(col_num)] for i in range(col_num)]
-   178        15     817183.0  54478.9      1.7          Mk = [np.linalg.inv(Aij[i][i]) for i in range(col_num)]
+   177        15     561927.0  37461.8      0.8          Aij = [[ Jk[i]@data.Minv@Jk[j].T for j in range(col_num)] for i in range(col_num)]
+   178        15     905130.0  60342.0      1.3          Mk = [np.linalg.inv(Aij[i][i]) for i in range(col_num)]
    179                                                   
-   180        15     141198.0   9413.2      0.3          J = np.vstack(Jk)
+   180        15     254505.0  16967.0      0.4          J = np.vstack(Jk)
    181                                                   
-   182        15       2045.0    136.3      0.0          iter = 0
-   183        15      86588.0   5772.5      0.2          impulse_last = [np.array([1,1,1])*1]*col_num
-   184        15      27776.0   1851.7      0.1          impulse = [np.array([1,1,1])*0]*col_num
-   185        15       2078.0    138.5      0.0          bound = ((None,None),(None,None),(0,None))
-   186        15       4455.0    297.0      0.0          cone = lambda force: (self.friction*force[2])**2-force[0]**2-force[1]**2
-   187        15       2762.0    184.1      0.0          cases = [None] * col_num
-   188        15       2567.0    171.1      0.0          cases_result = [None] * col_num
-   189        15       2933.0    195.5      0.0          contact_cases = ['sep','clamp','slide']
-   190        15      39415.0   2627.7      0.1          cases_init = {case:[np.array([0,0,0]),0] for case in contact_cases}
+   182        15       2515.0    167.7      0.0          iter = 0
+   183        15      71364.0   4757.6      0.1          impulse_last = [np.array([1,1,1])*1]*col_num
+   184        15      22835.0   1522.3      0.0          impulse = [np.array([1,1,1])*0]*col_num
+   185        15       1887.0    125.8      0.0          bound = ((None,None),(None,None),(0,None))
+   186        15       5315.0    354.3      0.0          cone = lambda force: (self.friction*force[2])**2-force[0]**2-force[1]**2
+   187        15       4131.0    275.4      0.0          cases = [None] * col_num
+   188        15       3965.0    264.3      0.0          cases_result = [None] * col_num
+   189        15       3683.0    245.5      0.0          contact_cases = ['sep','clamp','slide']
+   190        15     114325.0   7621.7      0.2          cases_init = {case:[np.array([0,0,0]),0] for case in contact_cases}
    191                                                   # methods = ['SLSQP','trust-constr'] # trust-constr多一位数时间
-   192        15       3700.0    246.7      0.0          opts = {'maxiter':1}
-   193        15       1630.0    108.7      0.0          impulse_eps = 1
-   194        30      24460.0    815.3      0.1          while impulse_eps > self.contact_eps and iter < self.contact_maxiter:
-   195        15       7646.0    509.7      0.0              impulse_last = impulse.copy()
+   192        15       5888.0    392.5      0.0          opts = {'maxiter':1}
+   193        15       2019.0    134.6      0.0          impulse_eps = 1
+   194        30      36992.0   1233.1      0.1          while impulse_eps > self.contact_eps and iter < self.contact_maxiter:
+   195        15      12781.0    852.1      0.0              impulse_last = impulse.copy()
    196                                                       
-   197        66      16594.0    251.4      0.0              for i in range(col_num):
-   198        51      20995.0    411.7      0.0                  cases[i] = cases_init.copy()
-   199        51     156422.0   3067.1      0.3                  ck = Jk[i]@(ddqf*self.dt+v)
-   200       240      38681.0    161.2      0.1                  for j in range(col_num):
-   201       189      24257.0    128.3      0.1                      if j==i:
-   202        51       4139.0     81.2      0.0                          continue
-   203       138     246297.0   1784.8      0.5                      ck += Aij[i][j]@impulse_last[j]
+   197        66      18376.0    278.4      0.0              for i in range(col_num):
+   198        51      29283.0    574.2      0.0                  cases[i] = cases_init.copy()
+   199        51     172065.0   3373.8      0.3                  ck = Jk[i]@(ddqf*self.dt+v)
+   200       240      51386.0    214.1      0.1                  for j in range(col_num):
+   201       189      33141.0    175.3      0.0                      if j==i:
+   202        51       5586.0    109.5      0.0                          continue
+   203       138     292537.0   2119.8      0.4                      ck += Aij[i][j]@impulse_last[j]
    204                                                           
-   205        51     146550.0   2873.5      0.3                  cases[i]['clamp'][0] = Mk[i]@(np.array([0,0,-height[i]/self.dt])-ck)
-   206        51     110709.0   2170.8      0.2                  if cone(cases[i]['clamp'][0])<0:
-   207        31      11097.0    358.0      0.0                      cases[i]['clamp'][1] = np.inf
+   205        51     181127.0   3551.5      0.3                  cases[i]['clamp'][0] = Mk[i]@(np.array([0,0,-height[i]/self.dt])-ck)
+   206        51     112003.0   2196.1      0.2                  if cone(cases[i]['clamp'][0])<0:
+   207        31      16814.0    542.4      0.0                      cases[i]['clamp'][1] = np.inf
    208                                                           else:
    209                                                               # cases[i]['clamp'][1] = objk(cases[i]['clamp'][0])
-   210        20       4254.0    212.7      0.0                      impulse[i] = cases[i]['clamp'][0]
-   211        20       2558.0    127.9      0.0                      cases_result[i] = 'clamp'
-   212        20       1715.0     85.8      0.0                      continue
+   210        20       6525.0    326.2      0.0                      impulse[i] = cases[i]['clamp'][0]
+   211        20       3424.0    171.2      0.0                      cases_result[i] = 'clamp'
+   212        20       2275.0    113.8      0.0                      continue
    213                                                           
-   214        31       9623.0    310.4      0.0                  contact_vk = lambda force: ck + Aij[i][i] @ force
-   215        31       8858.0    285.7      0.0                  jack = lambda force: 2*Aij[i][i].T@Mk[i]@contact_vk(force)
-   216        31       6737.0    217.3      0.0                  objk = lambda force: np.sqrt( contact_vk(force).T @ Mk[i] @ contact_vk(force) )
-   217        31     251112.0   8100.4      0.5                  cases[i]['sep'][1] = objk(cases[i]['sep'][0])
+   214        31      14932.0    481.7      0.0                  contact_vk = lambda force: ck + Aij[i][i] @ force
+   215        31      12658.0    408.3      0.0                  jack = lambda force: 2*Aij[i][i].T@Mk[i]@contact_vk(force)
+   216        31      10167.0    328.0      0.0                  objk = lambda force: np.sqrt( contact_vk(force).T @ Mk[i] @ contact_vk(force) )
+   217        31     245572.0   7921.7      0.4                  cases[i]['sep'][1] = objk(cases[i]['sep'][0])
    218                                                           
-   219        62    1536201.0  24777.4      3.3                  cons = (LinearConstraint(Aij[i][i][2,:],lb=-ck[2]-height[i]/self.dt,ub=-ck[2]-height[i]/self.dt),
-   220        31     126351.0   4075.8      0.3                      NonlinearConstraint(cone,lb=0,ub=0),
-   221        31      75799.0   2445.1      0.2                      NonlinearConstraint(lambda force: contact_vk(force)[0]*force[1]-contact_vk(force)[1]*force[0],lb=0,ub=0))
-   222        31   34518348.0    1e+06     73.6                  result = minimize(objk,impulse_last[i],constraints=cons,jac=jack,bounds=bound,method='SLSQP',options=opts)
-   223        31      83774.0   2702.4      0.2                  cases[i]['slide'][0] = result.x
-   224        31     271632.0   8762.3      0.6                  cases[i]['slide'][1] = objk(cases[i]['slide'][0])
+   219        62    1896715.0  30592.2      2.8                  cons = (LinearConstraint(Aij[i][i][2,:],lb=-ck[2]-height[i]/self.dt,ub=-ck[2]-height[i]/self.dt),
+   220        31     185217.0   5974.7      0.3                      NonlinearConstraint(cone,lb=0,ub=0),
+   221        31      90010.0   2903.5      0.1                      NonlinearConstraint(lambda force: contact_vk(force)[0]*force[1]-contact_vk(force)[1]*force[0],lb=0,ub=0))
+   222        31   51888608.0    2e+06     76.9                  result = minimize(objk,impulse_last[i],constraints=cons,jac=jack,bounds=bound,method='SLSQP',options=opts)
+   223        31     117307.0   3784.1      0.2                  cases[i]['slide'][0] = result.x
+   224        31     350178.0  11296.1      0.5                  cases[i]['slide'][1] = objk(cases[i]['slide'][0])
    225                                                           
-   226        31      92686.0   2989.9      0.2                  cases_result[i], (impulse[i], _) = min(cases[i].items(), key=lambda item: item[1][1])
+   226        31     134054.0   4324.3      0.2                  cases_result[i], (impulse[i], _) = min(cases[i].items(), key=lambda item: item[1][1])
    227                                                           
-   228        31      86307.0   2784.1      0.2                  if impulse[i][2] < self.contact_eps: # 数值误差，其实就是separate
-   229        31      48380.0   1560.6      0.1                      cases_result[i], impulse[i] = 'sep', np.array([0,0,0])
+   228        31     105623.0   3407.2      0.2                  if impulse[i][2] < self.contact_eps: # 数值误差，其实就是separate
+   229        31      55795.0   1799.8      0.1                      cases_result[i], impulse[i] = 'sep', np.array([0,0,0])
    230                                                           
-   231        15     233766.0  15584.4      0.5              impulse_eps = np.sum([np.abs(np.array(impulse)-np.array(impulse_last))])
-   232        15       4005.0    267.0      0.0              iter += 1
-   233        15       2984.0    198.9      0.0          if iter == self.contact_maxiter:
+   231        15     295753.0  19716.9      0.4              impulse_eps = np.sum([np.abs(np.array(impulse)-np.array(impulse_last))])
+   232        15       4695.0    313.0      0.0              iter += 1
+   233        15       3580.0    238.7      0.0          if iter == self.contact_maxiter:
    234                                                       # raise 'contact dynamics fails'
    235                                                       # 问题不大，硬算
-   236        15       1441.0     96.1      0.0              pass
+   236        15       1724.0    114.9      0.0              pass
    237                                                   # impulse = np.hstack(impulse)
-   238        15      31621.0   2108.1      0.1          impulse = np.concat(impulse)
+   238        15      36450.0   2430.0      0.1          impulse = np.concat(impulse)
    239                                                   
    240                                                   # classify
-   241        15       1973.0    131.5      0.0          slide_ids = []
-   242        15       1288.0     85.9      0.0          Es = []
-   243        15       1288.0     85.9      0.0          clamping_ids = []
-   244        66      13782.0    208.8      0.0          for i in range(col_num):
-   245        51       8036.0    157.6      0.0              if cases_result[i]=='sep': # separate
-   246        31       2428.0     78.3      0.0                  continue
-   247        20       3007.0    150.3      0.0              if cases_result[i]=='slide':
+   241        15       2270.0    151.3      0.0          slide_ids = []
+   242        15       1968.0    131.2      0.0          Es = []
+   243        15       1759.0    117.3      0.0          clamping_ids = []
+   244        66      15204.0    230.4      0.0          for i in range(col_num):
+   245        51      11420.0    223.9      0.0              if cases_result[i]=='sep': # separate
+   246        31       3274.0    105.6      0.0                  continue
+   247        20       4167.0    208.3      0.0              if cases_result[i]=='slide':
    248                                                           slide_ids.append(i)
    249                                                           Es.append(np.array([impulse[3*i]/impulse[3*i+2],impulse[3*i+1]/impulse[3*i+2],1])[:,np.newaxis])
    250                                                       else:
-   251        20       4933.0    246.7      0.0                  clamping_ids.append(i)
+   251        20       6182.0    309.1      0.0                  clamping_ids.append(i)
    252                                                   
-   253        15       1992.0    132.8      0.0          J_ = []
-   254        15       2142.0    142.8      0.0          contact_impulse = []
-   255        15       1555.0    103.7      0.0          Jleft = []
-   256        15       1469.0     97.9      0.0          Jright = []
-   257        15       1226.0     81.7      0.0          h = []
-   258        15       4050.0    270.0      0.0          if clamping_ids != []:
-   259         9      25847.0   2871.9      0.1              mask = sum([list(range(3*i, 3*i + 3)) for i in clamping_ids],[])
-   260         9      48742.0   5415.8      0.1              Jc = J[mask,:]
+   253        15       2863.0    190.9      0.0          J_ = []
+   254        15       2116.0    141.1      0.0          contact_impulse = []
+   255        15       2390.0    159.3      0.0          Jleft = []
+   256        15       2042.0    136.1      0.0          Jright = []
+   257        15       2287.0    152.5      0.0          h = []
+   258        15       5154.0    343.6      0.0          if clamping_ids != []:
+   259         9      37590.0   4176.7      0.1              mask = sum([list(range(3*i, 3*i + 3)) for i in clamping_ids],[])
+   260         9      61939.0   6882.1      0.1              Jc = J[mask,:]
    261                                                       # Jc = np.vstack([J[(3*i):(3*i+3),:] for i in clamping_ids])
-   262         9      11140.0   1237.8      0.0              impulsec = impulse[mask]
+   262         9      12549.0   1394.3      0.0              impulsec = impulse[mask]
    263                                                       # impulsec = np.hstack([impulse[(3*i):(3*i+3)] for i in clamping_ids])
-   264         9       2537.0    281.9      0.0              Jleft.append(Jc)
-   265         9       1630.0    181.1      0.0              Jright.append(Jc)
-   266         9       1342.0    149.1      0.0              J_.append(Jc)
-   267         9       1376.0    152.9      0.0              contact_impulse.append(impulsec)
+   264         9       2811.0    312.3      0.0              Jleft.append(Jc)
+   265         9       1888.0    209.8      0.0              Jright.append(Jc)
+   266         9       2127.0    236.3      0.0              J_.append(Jc)
+   267         9       3465.0    385.0      0.0              contact_impulse.append(impulsec)
    268                                                       # h.append(np.hstack( [np.array([0,0,height[i]]) for i in clamping_ids] ))
-   269         9      24716.0   2746.2      0.1              h += [np.array([0,0,height[i]]) for i in clamping_ids]
+   269         9      28761.0   3195.7      0.0              h += [np.array([0,0,height[i]]) for i in clamping_ids]
    270                                                       
-   271         9       3124.0    347.1      0.0              data.Jc = Jc
-   272         9       1782.0    198.0      0.0              data.impulsec = impulsec
-   273        15       3679.0    245.3      0.0          if slide_ids != []:
+   271         9       5471.0    607.9      0.0              data.Jc = Jc
+   272         9       2268.0    252.0      0.0              data.impulsec = impulsec
+   273        15       4850.0    323.3      0.0          if slide_ids != []:
    274                                                       mask1 = sum([list(range(3*i+2, 3*i + 3)) for i in slide_ids],[])
    275                                                       mask2 = sum([list(range(3*i, 3*i + 2)) for i in slide_ids],[])
    276                                                       mask3 = sum([list(range(3*i, 3*i + 3)) for i in slide_ids],[])
@@ -189,32 +189,32 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
    300                                                       data.impulsesn = impulsesn
    301                                                       data.impulsest = impulsest
    302                                                   
-   303        15       4710.0    314.0      0.0          if slide_ids+clamping_ids == []:
-   304         6       1897.0    316.2      0.0              data.real_collision = False
-   305         6        544.0     90.7      0.0              return False
+   303        15       6559.0    437.3      0.0          if slide_ids+clamping_ids == []:
+   304         6       2810.0    468.3      0.0              data.real_collision = False
+   305         6        821.0    136.8      0.0              return False
    306                                                   
    307                                                   # data.h = np.hstack(h)
-   308         9      30578.0   3397.6      0.1          data.h = np.concat(h)
-   309         9      51330.0   5703.3      0.1          Jleft = np.vstack(Jleft)        
-   310         9      31836.0   3537.3      0.1          Jright = np.vstack(Jright)
+   308         9      68752.0   7639.1      0.1          data.h = np.concat(h)
+   309         9      56839.0   6315.4      0.1          Jleft = np.vstack(Jleft)        
+   310         9      33543.0   3727.0      0.0          Jright = np.vstack(Jright)
    311                                                   
-   312         9      47600.0   5288.9      0.1          A = Jleft@data.Minv@Jright.T
-   313         9      27668.0   3074.2      0.1          b = Jleft@(ddqf*self.dt+v)
+   312         9      56781.0   6309.0      0.1          A = Jleft@data.Minv@Jright.T
+   313         9      26293.0   2921.4      0.0          b = Jleft@(ddqf*self.dt+v)
    314                                                   
-   315         9       4157.0    461.9      0.0          data.contactJleft = Jleft
-   316         9       1782.0    198.0      0.0          data.contactJright = Jright
-   317         9      31006.0   3445.1      0.1          data.contactJ = np.vstack(J_)
+   315         9      18249.0   2027.7      0.0          data.contactJleft = Jleft
+   316         9       1635.0    181.7      0.0          data.contactJright = Jright
+   317         9      34968.0   3885.3      0.1          data.contactJ = np.vstack(J_)
    318                                                   # data.impulse = np.hstack(contact_impulse)
-   319         9       9411.0   1045.7      0.0          data.impulse = np.concat(contact_impulse)
+   319         9      10715.0   1190.6      0.0          data.impulse = np.concat(contact_impulse)
    320                                                   
    321                                                   # Ainv = np.linalg.inv(A)
-   322         9       5565.0    618.3      0.0          D = data.impulse.copy()
-   323         9       2034.0    226.0      0.0          if slide_ids == []:
-   324         9      10051.0   1116.8      0.0              D[::3] = 1
-   325         9       4830.0    536.7      0.0              D[1::3] = 1
-   326         9      22915.0   2546.1      0.0              D = self.rho/D**2
-   327         9       4467.0    496.3      0.0              D[::3] = 0
-   328         9       4167.0    463.0      0.0              D[1::3] = 0
+   322         9       6392.0    710.2      0.0          D = data.impulse.copy()
+   323         9       2239.0    248.8      0.0          if slide_ids == []:
+   324         9      11896.0   1321.8      0.0              D[::3] = 1
+   325         9       4274.0    474.9      0.0              D[1::3] = 1
+   326         9      32702.0   3633.6      0.0              D = self.rho/D**2
+   327         9       4281.0    475.7      0.0              D[::3] = 0
+   328         9       4162.0    462.4      0.0              D[1::3] = 0
    329                                                   else:
    330                                                       snum = len(slide_ids)
    331                                                       D = D[:(-2*snum)]
@@ -223,94 +223,94 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
    334                                                       D = self.rho/D**2
    335                                                       D[:(-snum):3] = 0
    336                                                       D[1:(-snum):3] = 0
-   337         9     238566.0  26507.3      0.5          Ainv = np.linalg.inv(A + np.diag(D))
+   337         9     290415.0  32268.3      0.4          Ainv = np.linalg.inv(A + np.diag(D))
    338                                                   
-   339         9       3422.0    380.2      0.0          data.slide_ids = slide_ids
-   340         9       1451.0    161.2      0.0          data.clamping_ids = clamping_ids
-   341         9       1173.0    130.3      0.0          data.contactAinv = Ainv
-   342         9       1215.0    135.0      0.0          data.contactb = b
-   343         9      15925.0   1769.4      0.0          data.contactpreb = (ddqf*self.dt+v)
-   344         9      24194.0   2688.2      0.1          data.effect = data.contactJ.T@data.impulse/self.dt
-   345         9       1407.0    156.3      0.0          data.real_collision = True
-   346         9        970.0    107.8      0.0          return True
+   339         9       2249.0    249.9      0.0          data.slide_ids = slide_ids
+   340         9      14326.0   1591.8      0.0          data.clamping_ids = clamping_ids
+   341         9       3941.0    437.9      0.0          data.contactAinv = Ainv
+   342         9       1975.0    219.4      0.0          data.contactb = b
+   343         9      16461.0   1829.0      0.0          data.contactpreb = (ddqf*self.dt+v)
+   344         9      27950.0   3105.6      0.0          data.effect = data.contactJ.T@data.impulse/self.dt
+   345         9       2170.0    241.1      0.0          data.real_collision = True
+   346         9       1489.0    165.4      0.0          return True
 
-Total time: 0.0511449 s
-File: /home/joshua/WORK/test_genesis/cimpc/utils/models.py
+Total time: 0.0735682 s
+File: /home/douyuanke/cimpc1/ftddp/utils/models.py
 Function: calc at line 347
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
    347                                               @profile
    348                                               def calc(self, data, x, u=None):
-   349        76      15847.0    208.5      0.0          if u is None: # 最后那一步默认u=None
-   350         2       3773.0   1886.5      0.0              q, v = x[: self.state.nq], x[-self.state.nv :]
-   351         2       2078.0   1039.0      0.0              if v[2] < -q[2]/self.dt:
+   349        76      20780.0    273.4      0.0          if u is None: # 最后那一步默认u=None
+   350         2       4729.0   2364.5      0.0              q, v = x[: self.state.nq], x[-self.state.nv :]
+   351         2       2831.0   1415.5      0.0              if v[2] < -q[2]/self.dt:
    352                                                           v[2] = -q[2]/self.dt
    353                                                           
-   354         2      14272.0   7136.0      0.0              pinocchio.computeAllTerms(self.state.pinocchio, data.pinocchio, q, v)            
-   355         2       3400.0   1700.0      0.0              self.costs.calc(data.costs, x)
-   356         2        800.0    400.0      0.0              data.cost = data.costs.cost
+   354         2      17363.0   8681.5      0.0              pinocchio.computeAllTerms(self.state.pinocchio, data.pinocchio, q, v)            
+   355         2       5962.0   2981.0      0.0              self.costs.calc(data.costs, x)
+   356         2       1277.0    638.5      0.0              data.cost = data.costs.cost
    357                                                   else:
-   358        74     122390.0   1653.9      0.2              q, v = x[: self.state.nq], x[-self.state.nv :]
-   359        74      60933.0    823.4      0.1              if v[2] < -q[2]/self.dt:
-   360         4       1886.0    471.5      0.0                  v[2] = -q[2]/self.dt
+   358        74     166900.0   2255.4      0.2              q, v = x[: self.state.nq], x[-self.state.nv :]
+   359        74      94904.0   1282.5      0.1              if v[2] < -q[2]/self.dt:
+   360         3       1937.0    645.7      0.0                  v[2] = -q[2]/self.dt
    361                                           
    362                                                       # u = np.clip(u,-self.control_bound*np.ones(self.actuation.nu),self.control_bound*np.ones(self.actuation.nu))
-   363        74      77936.0   1053.2      0.2              self.actuation.calc(data.actuation, x, u)
-   364        74      36248.0    489.8      0.1              tau = data.actuation.tau
+   363        74     137442.0   1857.3      0.2              self.actuation.calc(data.actuation, x, u)
+   364        74      50086.0    676.8      0.1              tau = data.actuation.tau
    365                                                                   
-   366        74     545669.0   7373.9      1.1              pinocchio.computeAllTerms(self.state.pinocchio, data.pinocchio, q, v)
-   367        74     463812.0   6267.7      0.9              pinocchio.computeMinverse(self.state.pinocchio, data.pinocchio, q)
-   368        74      73973.0    999.6      0.1              pinocchio.updateFramePlacements(self.state.pinocchio, data.pinocchio)
+   366        74     760985.0  10283.6      1.0              pinocchio.computeAllTerms(self.state.pinocchio, data.pinocchio, q, v)
+   367        74     540893.0   7309.4      0.7              pinocchio.computeMinverse(self.state.pinocchio, data.pinocchio, q)
+   368        74     116807.0   1578.5      0.2              pinocchio.updateFramePlacements(self.state.pinocchio, data.pinocchio)
    369                                                       
-   370        74   47915332.0 647504.5     93.7              collision = self.collision_test(data, tau, v)
+   370        74   68965441.0 931965.4     93.7              collision = self.collision_test(data, tau, v)
    371                                                       
    372                                                       # Computing the dynamics using ABA
-   373        74       9501.0    128.4      0.0              if collision:
-   374        18      95454.0   5303.0      0.2                  data.xout[:] = pinocchio.aba(
-   375         9      24555.0   2728.3      0.0                  self.state.pinocchio, data.pinocchio, q, v, tau+data.effect
+   373        74      11187.0    151.2      0.0              if collision:
+   374        18     141024.0   7834.7      0.2                  data.xout[:] = pinocchio.aba(
+   375         9      41529.0   4614.3      0.1                  self.state.pinocchio, data.pinocchio, q, v, tau+data.effect
    376                                                           )
    377                                                       else:
-   378       130     490481.0   3772.9      1.0                  data.xout[:] = pinocchio.aba(
-   379        65      56502.0    869.3      0.1                  self.state.pinocchio, data.pinocchio, q, v, tau
+   378       130     625432.0   4811.0      0.9                  data.xout[:] = pinocchio.aba(
+   379        65      96515.0   1484.8      0.1                  self.state.pinocchio, data.pinocchio, q, v, tau
    380                                                           )
    381                                                       
    382                                                       # Computing the cost value and residuals
-   383        74     168755.0   2280.5      0.3              pinocchio.forwardKinematics(self.state.pinocchio, data.pinocchio, q, v)
-   384        74      80260.0   1084.6      0.2              pinocchio.updateFramePlacements(self.state.pinocchio, data.pinocchio)
+   383        74     227925.0   3080.1      0.3              pinocchio.forwardKinematics(self.state.pinocchio, data.pinocchio, q, v)
+   384        74     102120.0   1380.0      0.1              pinocchio.updateFramePlacements(self.state.pinocchio, data.pinocchio)
    385                                                       
-   386        74     842728.0  11388.2      1.6              self.costs.calc(data.costs, x, u)
-   387        74      38272.0    517.2      0.1              data.cost = data.costs.cost
+   386        74    1374465.0  18573.9      1.9              self.costs.calc(data.costs, x, u)
+   387        74      59715.0    807.0      0.1              data.cost = data.costs.cost
 
-Total time: 0.00119013 s
-File: /home/joshua/WORK/test_genesis/cimpc/utils/models.py
+Total time: 0.0013499 s
+File: /home/douyuanke/cimpc1/ftddp/utils/models.py
 Function: calcDiff at line 389
 
 Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
    389                                               def calcDiff(self, data, x, u=None):
-   390        21       3657.0    174.1      0.3          if u is None:
-   391         1       3208.0   3208.0      0.3              self.costs.calcDiff(data.costs, x)
+   390        21       4249.0    202.3      0.3          if u is None:
+   391         1       4836.0   4836.0      0.4              self.costs.calcDiff(data.costs, x)
    392                                                   else:
    393                                                   
    394                                                       # u = np.clip(u,-self.control_bound*np.ones(self.actuation.nu),self.control_bound*np.ones(self.actuation.nu))
-   395        20      21741.0   1087.0      1.8              nq, nv = self.state.nq, self.state.nv
-   396        20       9773.0    488.6      0.8              q, v = x[:nq], x[-nv:]
+   395        20      22183.0   1109.2      1.6              nq, nv = self.state.nq, self.state.nv
+   396        20      10040.0    502.0      0.7              q, v = x[:nq], x[-nv:]
    397                                                       # Computing the actuation derivatives
-   398        20      15680.0    784.0      1.3              self.actuation.calcDiff(data.actuation, x, u)
-   399        20       7240.0    362.0      0.6              tau = data.actuation.tau
+   398        20      17465.0    873.2      1.3              self.actuation.calcDiff(data.actuation, x, u)
+   399        20       9616.0    480.8      0.7              tau = data.actuation.tau
    400                                                       # Computing the dynamics derivatives
-   401        20       3367.0    168.3      0.3              if not data.real_collision:
+   401        20       4126.0    206.3      0.3              if not data.real_collision:
    402                                                           # Computing the cost derivatives
-   403        40     274006.0   6850.1     23.0                  pinocchio.computeABADerivatives(
-   404        20       9857.0    492.9      0.8                      self.state.pinocchio, data.pinocchio, q, v, tau
+   403        40     265398.0   6634.9     19.7                  pinocchio.computeABADerivatives(
+   404        20      11548.0    577.4      0.9                      self.state.pinocchio, data.pinocchio, q, v, tau
    405                                                           )
-   406        20       8455.0    422.8      0.7                  ddq_dq = data.pinocchio.ddq_dq
-   407        20       5255.0    262.8      0.4                  ddq_dv = data.pinocchio.ddq_dv
-   408        20     279820.0  13991.0     23.5                  data.Fx[:, :] = np.hstack([ddq_dq, ddq_dv]) + data.pinocchio.Minv@data.actuation.dtau_dx
-   409        20      58578.0   2928.9      4.9                  data.Fu[:, :] = data.pinocchio.Minv@data.actuation.dtau_du
-   410        20     487383.0  24369.2     41.0                  self.costs.calcDiff(data.costs, x, u)
-   411        20       2110.0    105.5      0.2                  return
+   406        20      11227.0    561.4      0.8                  ddq_dq = data.pinocchio.ddq_dq
+   407        20       6603.0    330.1      0.5                  ddq_dv = data.pinocchio.ddq_dv
+   408        20     287464.0  14373.2     21.3                  data.Fx[:, :] = np.hstack([ddq_dq, ddq_dv]) + data.pinocchio.Minv@data.actuation.dtau_dx
+   409        20      82380.0   4119.0      6.1                  data.Fu[:, :] = data.pinocchio.Minv@data.actuation.dtau_du
+   410        20     609789.0  30489.5     45.2                  self.costs.calcDiff(data.costs, x, u)
+   411        20       2977.0    148.8      0.2                  return
    412                                                                   
    413                                                       pinocchio.computeABADerivatives(
    414                                                           self.state.pinocchio, data.pinocchio, q, v, tau+data.effect
