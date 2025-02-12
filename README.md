@@ -8,6 +8,7 @@ dependences:
 - tqdm
 - line_profiler
 - meshcat
+- matplotlib
 
 
 ```
@@ -15,4 +16,5 @@ dependences:
    pip install tqdm
    pip install line_profiler
    pip install --user meshcat
+   pip install matplotlib
 ```
